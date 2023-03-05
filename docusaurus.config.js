@@ -101,7 +101,7 @@ const config = {
             items: [
               {
                 label: 'GitHub Discussion',
-                href: 'https://github.com/simple-is-awesome/simple/discussions',
+                href: 'https://github.com/orgs/simple-is-awesome/discussions',
               }
             ],
           },
