@@ -5,4 +5,4 @@
 
 ## Introduction
 
-This repo stores the docs of simple blog system.
+This repo stores the docs of [simple blog system](https://github.com/simple-is-awesome/simple).

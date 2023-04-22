@@ -1,43 +1,34 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
+import Translate, {translate} from '@docusaurus/Translate';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Simple blog was designed to be easy to use and customize. The features is abundant.
-      </>
-    ),
-  },
+    title: <Translate>Powered by Next.js</Translate>,
+    Svg: require('@site/static/img/nextjs.svg').default,
+    description: <Translate>Built with Next.js, leveraging the power of both SSG and SSR to deliver a fast and dynamic personal blogging experience.</Translate>,
+    isSmall: false,
+  },  
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
-    description: (
-      <>
-        Simple blog lets you focus on your blog, and we&apos;ll do the chores.
-      </>
-    ),
-  },
+    title: <Translate>Integrate with GPT-3.5</Translate>,
+    Svg: require('@site/static/img/chatgpt.svg').default,
+    description: <Translate>Integrate GPT-3.5 Turbo API to summarize your articles. Elevate your blog to a new level of modernity and sophistication.</Translate>,
+    isSmall: true,
+  },  
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Simple blog can
-        be extended while reusing the same header and footer.
-      </>
-    ),
-  },
+    title: <Translate>Comment Security with Cloudflare Turnstile</Translate>,
+    Svg: require('@site/static/img/cloudflare.svg').default,
+    description: <Translate>Enhance your blog's comment section with Cloudflare Turnstile integration. Protect your site from spam and abuse.</Translate>,
+    isSmall: false,
+  }  
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({Svg, title, description,isSmall}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <Svg className={isSmall ? styles.featureSvgSmall : styles.featureSvg} role="img" />
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>

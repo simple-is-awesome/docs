@@ -1,0 +1,148 @@
+---
+sidebar_position: 3
+sidebar_label: "自托管部署"
+title: "自托管部署"
+---
+
+:::tip
+预备条件
+
+- 一台VPS（以Debian 11为例，推荐大陆地区以外的vps，大陆地区的服务器需备案后，才可以使用80、443端口）
+
+- 一个域名
+
+:::
+
+
+## 整体架构流程
+
+![自部署架构流程](https://vip2.loli.io/2023/04/20/cKXVud7n9YIeZEz.webp)
+
+## 具体操作
+
+为了方便部署，个人博客系统采用docker部署的方式，使用docker部署优点颇多，具体可见互联网上关于docker部署优势的讨论。
+
+- 第一步，安装docker。
+
+```bash
+# 一键安装docker
+curl -fsSL https://get.docker.com | sh
+```
+
+在vps上执行上上述指令后，在终端输入`docker`和`docker compose`会出现相应的提示信息，则表明docker已经安装完成。
+
+> 注：使用上述命令一键安装docker，可能会提示curl工具没安装，遇到这种情况，可以使用`apt install curl -y`命令先安装curl工具，再执行此一键脚本。
+
+- 第二步，创建博客目录。
+
+```bash
+# 创建名为blog的文件夹
+mkdir blog
+# 进入blog文件夹
+cd blog
+```
+
+- 第三部，创建`docker-compose.yml`文件
+
+```bash
+# 新建docker-compose.yml文件，并用vim编辑器编辑
+vim docker-compose.yml
+
+粘贴以下内容
+```
+
+- cloudflare解析域名
+
+假设你有一个域名为abc.com托管至了cloudflare，则我们需要添加两条A记录。
+
+一条A记录，记录名为supabase，记录值为你vps的ip地址；
+另一条A记录，记录名为api.supabase，记录值为你vps的ip地址。
+
+- 自托管nginx proxy manager或者自托管caddy
+
+debian安装caddy的步骤。[官方文档](https://caddyserver.com/docs/install)
+
+```bash
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+```
+
+接着可以编辑/etc/caddy/Caddyfile文件，添加以下内容：
+
+```bash
+supbase.abc.com {
+    reverse_proxy localhost:3000
+}
+
+api.supabase.abc.com {
+    reverse_proxy localhost:8000
+}
+```
+
+再在命令行中执行以下命令：
+
+```bash
+systemctl reload caddy
+```
+
+- 自托管supabase
+
+[官方文档](https://supabase.com/docs/guides/self-hosting/docker)
+
+根据官方文档的步骤，执行以下命令。
+
+```bash
+git clone --depth 1 https://github.com/supabase/supabase
+
+cd supabase/docker
+
+cp .env.example .env
+```
+
+修改.env文件的内容：
+
+```yaml
+POSTGRES_PASSWORD=xxxxxx
+JWT_SECRET=xxxxxx
+ANON_KEY=xxxxxx
+SERVICE_ROLE_KEY=xxxxxx
+
+SITE_URL=xxxxxx
+API_EXTERNAL_URL=xxxxxx
+
+## Email auth
+ENABLE_EMAIL_SIGNUP=xxxxxx
+ENABLE_EMAIL_AUTOCONFIRM=xxxxxx
+SMTP_ADMIN_EMAIL=xxxxxx
+SMTP_HOST=xxxxxx
+SMTP_PORT=xxxxxx
+SMTP_USER=xxxxxx
+SMTP_PASS=xxxxxx
+SMTP_SENDER_NAME=xxxxxx
+
+# replace if you intend to use Studio outside of localhost
+SUPABASE_PUBLIC_URL=xxxxxx
+```
+
+修改volumes/api/kong.yml文件的内容：
+
+```yaml
+consumers:
+  - username: anon
+    keyauth_credentials:
+      - key: xxxxxx
+  - username: service_role
+    keyauth_credentials:
+      - key: xxxxxx
+```
+
+接着在supabase/docker目录下执行以下命令：
+
+```bash
+docker-compose up -d
+```
+
+此时，访问https://supabase.abc.com，就能来到supabase的登录页面了。
