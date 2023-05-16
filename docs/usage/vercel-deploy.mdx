@@ -6,7 +6,7 @@ title: "Vercel Deploy"
 
 :::tip
 
-Vercel is a platform for deployment of front-end projects(now has evolved to front-end cloud), which is very suitable for deploying this Next.js app.
+Vercel is a platform for deployment of front-end projects(now has evolved to front-end cloud), which is very suitable for deploying the Next.js app.
 
 You can find more information in [Vercel](https://vercel.com/) website.
 
@@ -32,7 +32,11 @@ Coming soon.
 
 ![vercel deploy img 2](https://vip2.loli.io/2023/04/17/c9mHiUlIoTNbLOK.webp)
 
-- d. Set the environment variables.(This step is recommended to watch the video version)
+- d. Set custom domain name.(This step is recommended to watch the video version)
+
+Click Settings->Domains in the vercel project, fill in the corresponding domain name, and then add a CNAME record in the domain hosting platform.
+
+- e. Set the environment variables.(This step is recommended to watch the video version)
 
 Come to the Setting option of the project and set the environment variables.
 
@@ -40,7 +44,7 @@ Come to the Setting option of the project and set the environment variables.
 
 Add the following environment variables. For example, fill the Key with `NEXT_PUBLIC_SITE_TITLE`, Value with `test`, and the title of website will become `test`.
 
-You can add the environment variables with the examples below, the last part of environment variables named supabase can be delay.
+You can add the environment variables with the examples below, the last part of environment variables named supabase can be filled later.
 
 ```
 # Basic config
@@ -55,7 +59,7 @@ NEXT_PUBLIC_SHOW_COMMENT=true
 
 # Third-party In Integration
 NEXT_PUBLIC_INOREADER_CHANNEL=https://www.inoreader.com/stream/user/1005341682/tag/user-broadcasted/view/json
-NEXT_PUBLIC_RAINDROP=https://raindrop.io/Jiakai/interesting-32937900
+NEXT_PUBLIC_RAINDROP=https://bg.raindrop.io/rss/public/32937900
 
 # OpenAI
 NEXT_PUBLIC_OPENAI_API_KEY_AVAILABLE=true
@@ -98,6 +102,77 @@ After adding these environment variables, you should redeploy the project to mak
 
 ![vercel project redeploy](https://vip2.loli.io/2023/05/16/JYLFX5bdHyqGOR9.webp)
 
-- e. Set custom domain name.
+- f. New articles
 
-Click Settings->Domains in the vercel project, fill in the corresponding domain name, and just do the resolution of cname records in the domain hosting platform.
+You can open your GitHub repository page and find the repository created in Vercel's deployment.
+
+![vercel新创建的仓库页面](https://vip2.loli.io/2023/05/16/k2E1DxIvY4iwnmU.webp)
+
+Enter the keyboard `. ` decimal key, using the editor of github.dev, to display the repository file.
+
+![用github.dev展示仓库文件](https://vip2.loli.io/2023/05/16/NIzFvEt2UgXePT9.webp)
+
+Find the posts folder and create a new md or mdx file in that folder.
+
+![新建文件](https://vip2.loli.io/2023/05/16/4kAwNiEaUBo7QuK.webp)
+
+For example, I created a new Markdown file called test.md in the posts folder. and then add frontmatter and text content to this MarkDown file.
+
+example:
+
+```markdown
+---
+title: '测试'
+date: '2023-05-16'
+tags: ['test']
+slug: 'test'
+summary: 'test'
+showtoc: false
+---
+
+测试一下！
+```
+
+The frontmatter is the article's metadata, which provides the article's title, date, tags, links, summary and other information that you can write on demand.
+Among them, title, date, tags, slug, summary are required, showtoc optional, if you need to make the article display article toc, you can change the showtoc 
+parameter to true, If you don't add showtoc parameter, the default value is false, it means that don't show the article toc.
+
+![Push Code](https://vip2.loli.io/2023/05/16/pAMcBanWVRGmJoQ.webp)
+
+Next, click source code control on the left side of the web-based vscode editor, fill in the commit information, and click Commit & Push to push the newly 
+created article to the GitHub repository.
+
+![Back to the GitHub repository page](https://vip2.loli.io/2023/05/16/vMeLBCVA2S1yRWx.webp)
+
+After this, change github.dev to github.com in the browser address bar to return to the original GitHub repository page.
+
+![View newly added files](https://vip2.loli.io/2023/05/16/zANa6dx2btT48H3.webp)
+
+Expand on the posts folder, check the new test.md you just created. The image above shows that it has been successfully pushed to the GitHub repository.
+
+![vercel automatic deployment](https://vip2.loli.io/2023/05/16/fW9ganXksS4zMjV.webp)
+
+Come to the deployment screen of vercel. You can see that vercel monitored the changes to the repository and triggered an automatic deployment 
+and the site has been deployed automatically.
+
+![New articles online](https://vip2.loli.io/2023/05/16/iwY65chT2GeNLpJ.webp)
+
+Refresh the site and the article you just added is already displayed at the top.
+
+- g. Delete articles, edit articles
+
+The steps are the same as f, just manipulate the files in the posts folder, in which you can modify the article.
+
+You can go directly to the article page, the first part of each article has a hyperlink to edit the article.
+
+Click on the hyperlink, you can jump directly to the corresponding file page of GitHub.
+
+![Modify article information and submit](https://vip2.loli.io/2023/05/16/aSCrsMV1OIlvBfR.webp)
+
+After modifying the article information, then Commit changes, then it will trigger the automatic deployment of vercel.
+
+![](https://vip2.loli.io/2023/05/16/fzCvPtwDm3H8MJu.webp)
+
+Wait patiently for the vercel build to finish (it takes about 2~3 minutes to build), then come to the article page again to refresh and see the modified article information.
+
+![Modified article information](https://vip2.loli.io/2023/05/16/uVCUvXKJGwcBNR9.webp)

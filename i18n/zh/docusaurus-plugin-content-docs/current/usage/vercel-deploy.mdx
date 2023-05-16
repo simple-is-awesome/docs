@@ -4,6 +4,14 @@ sidebar_label: "Vercel部署（推荐）"
 title: "Vercel部署"
 ---
 
+:::tip
+
+Vercel是一个用于部署前端项目的平台（现在已经发展为前端云），它非常适合部署这个Next.js应用程序。
+
+你可以在[Vercel](https://vercel.com/)网站上找到更多信息。
+
+:::
+
 ## 1. 视频版
 
 即将到来！
@@ -24,7 +32,11 @@ title: "Vercel部署"
 
 ![vercel部署图二](https://vip2.loli.io/2023/04/17/c9mHiUlIoTNbLOK.webp)
 
-- d. 设置环境变量。【这步操作建议观看视频版本进行】
+- d. 设置自定义域名。【这步操作建议观看视频版本进行】
+
+点击vercel项目中的Settings—>Domains，填写相应域名，并在域名托管平台做好CNAME记录的解析即可。
+
+- e. 设置环境变量。【这步操作建议观看视频版本进行】
 
 来到刚才项目的设置界面，设置环境变量。
 
@@ -47,7 +59,7 @@ NEXT_PUBLIC_SHOW_COMMENT=true
 
 # Third-party In Integration
 NEXT_PUBLIC_INOREADER_CHANNEL=https://www.inoreader.com/stream/user/1005341682/tag/user-broadcasted/view/json
-NEXT_PUBLIC_RAINDROP=https://raindrop.io/Jiakai/interesting-32937900
+NEXT_PUBLIC_RAINDROP=https://bg.raindrop.io/rss/public/32937900
 
 # OpenAI
 NEXT_PUBLIC_OPENAI_API_KEY_AVAILABLE=true
@@ -88,6 +100,76 @@ NEXT_PUBLIC_SUPABASE_URL=https://snqvusjdarcjzrqsdwsi.supabase.co
 
 ![vercel project redeploy](https://vip2.loli.io/2023/05/16/JYLFX5bdHyqGOR9.webp)
 
-- e. 设置自定义域名。
+- f. 新增博客文章。
 
-点击vercel项目中的Settings—>Domains，填写相应域名，并在域名托管平台做好cname记录的解析即可。
+你可以打开你的GitHub仓库页面，找到刚才在vercel部署中创建的仓库。
+
+![vercel新创建的仓库页面](https://vip2.loli.io/2023/05/16/k2E1DxIvY4iwnmU.webp)
+
+输入键盘上的`.`小数点按键，用github.dev的编辑器，展示仓库文件。
+
+![用github.dev展示仓库文件](https://vip2.loli.io/2023/05/16/NIzFvEt2UgXePT9.webp)
+
+找到posts文件夹，在该文件夹下新建md或者mdx文件。
+
+![新建文件](https://vip2.loli.io/2023/05/16/4kAwNiEaUBo7QuK.webp)
+
+比如，我在posts文件夹下新建了一个名为test.md的markdown文件。
+
+接着给这个markdown文件添加frontmatter以及正文内容。
+
+example:
+
+```markdown
+---
+title: '测试'
+date: '2023-05-16'
+tags: ['test']
+slug: 'test'
+summary: 'test'
+showtoc: false
+---
+
+测试一下！
+```
+
+其中frontmatter是文章的元数据，提供了文章的标题、日期、标签、链接、摘要等信息，你可以按需编写。
+其中title、date、tags、slug、summary必填，showtoc选填，如果你需要给你的这篇文章开启右侧展示文章目录，则可以填写，不填写此参数，默认为false，即不展示文章目录。
+
+![推送代码](https://vip2.loli.io/2023/05/16/pAMcBanWVRGmJoQ.webp)
+
+接着点击网页版vscode编辑器的左侧的源代码管理，填写提交信息，点击Commit & Push，即可将新创建的文章推送至GitHub仓库。
+
+![返回GitHub仓库页面](https://vip2.loli.io/2023/05/16/vMeLBCVA2S1yRWx.webp)
+
+经过这通操作后，将浏览器地址栏中的github.dev更改为github.com，以返回原本的GitHub仓库页面。
+
+![查看新添加的文件](https://vip2.loli.io/2023/05/16/zANa6dx2btT48H3.webp)
+
+点开posts文件夹，查看刚才新创建的test.md，上图表明已经成功推送至GitHub仓库了。
+
+![vercel自动部署](https://vip2.loli.io/2023/05/16/fW9ganXksS4zMjV.webp)
+
+来到vercel的部署界面。可以看到vercel监测到仓库的更改，并触发了自动部署，网站已经被部署上线。
+
+![新增文章上线](https://vip2.loli.io/2023/05/16/iwY65chT2GeNLpJ.webp)
+
+刷新网站，刚添加的文章已经展示在最顶部。
+
+- g. 删除文章、修改文章
+
+原理同f，操作posts文件夹下的文件即可。
+
+其中修改文章，可以直接去到文章页，每篇文章的首部均有编辑文章的超链接，点击超链接，可以直接跳转至GitHub相应文件的页面。
+
+![修改文章信息，并提交](https://vip2.loli.io/2023/05/16/aSCrsMV1OIlvBfR.webp)
+
+修改完文章信息，再Commit changes，接着便会触发vercel的自动部署。
+
+![](https://vip2.loli.io/2023/05/16/fzCvPtwDm3H8MJu.webp)
+
+耐心等待vercel构建完成（大概需要2~3分钟的构建时间），再次来到文章页面刷新，即可看到修改后的文章信息。
+
+![修改后的文章信息](https://vip2.loli.io/2023/05/16/uVCUvXKJGwcBNR9.webp)
+
+

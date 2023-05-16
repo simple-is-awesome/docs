@@ -8,7 +8,7 @@ title: "Selfhosted Deploy"
 
 Pre-requisites
 
-- A VPS (Debian 11 for example, vps outside the mainland is recommended, servers in the mainland need to be filed before they can use port 80 and 443)
+- A VPS (Debian 11 for example, vps outside the mainland China is recommended, servers in the mainland China need to be checked by ICP before they can use port 80 and 443)
 
 - A domain name
 :::
@@ -31,7 +31,7 @@ Coming soon.
 apt install curl -y
 ```
 
-#### b. 安装docker和docker compose
+#### b. Install docker and docker compose
 
 ```bash
 curl -fsSL https://get.docker.com | sh
@@ -159,7 +159,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=xxxxxx
 NEXT_PUBLIC_SUPABASE_URL=xxxxxx
 ```
 
-#### f. The reverse proxy blog docker and the host corresponding port
+#### f. The reverse proxy server—caddy settings
 
 Edit /etc/caddy/Caddyfile
 
@@ -177,9 +177,9 @@ systemctl reload caddy
 
 #### g. Writing a blog
 
-Create a new md or mdx file in the posts folder under the simple folder.
+Create a new md or mdx file in the posts folder.
 
-Follow the frontmatter as shown below:
+Follow the frontmatter as shown below(showtoc is optional and others are required):
 
 ```
 ---

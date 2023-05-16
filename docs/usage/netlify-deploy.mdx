@@ -4,6 +4,14 @@ sidebar_label: "Netlify Deploy"
 title: "Netlify Deploy"
 ---
 
+:::tip
+
+Netlify is a platform for deployment of front-end projects like Vercel, which supports Next.js app deployment.
+
+You can find more information in [Netlify](https://netlify.app) website.
+
+:::
+
 ## 1. Video version
 
 Coming soon.
@@ -13,3 +21,95 @@ Coming soon.
 - a. Click on the vercel one-click deployment button.
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/simple-is-awesome/simple)
+
+- b. After connected to your GitHub account, fill in the repository name and click Save & Deploy.
+
+![netlify deploy image 1](https://vip2.loli.io/2023/05/16/EUwDriyO8MbsuIT.webp)
+
+- c. Wait for netlify finishing automatic deployment(about 2~3 min)
+
+![netlify deploy image 2](https://vip2.loli.io/2023/05/16/TXLC4DMIZwz2biV.webp)
+
+![netlify deploy image 3](https://vip2.loli.io/2023/05/16/rqltQdkGY3PN9WD.webp)
+
+- d. Custom domain name.【This step is recommended to watch the video version】
+
+Click on the Site settings—>Domains—>Add domain alias in netlify project, Fill in the corresponding domain name, and then add a CNAME record on the domain hosting platform.
+
+![set custom domain](https://vip2.loli.io/2023/05/16/olk3K8sjSzDdcx4.webp)
+
+- e. Custom environment variables.【This step is recommended to watch the video version】
+
+Set the environment variables in the Site settings option page.
+
+![netlify deploy image 4](https://vip2.loli.io/2023/05/16/IZztXFfJT2vR98k.webp)
+
+Add the following environment variables. For example, fill the Key with `NEXT_PUBLIC_SITE_TITLE`, Value with `test`, and the title of website will become `test`.
+
+You can add the environment variables with the examples below, the last part of environment variables named supabase can be filled later.
+
+```
+# Basic config
+NEXT_PUBLIC_SITE_URL=https://test-ntl.njxzc.top
+NEXT_PUBLIC_SITE_TITLE=test netlify
+NEXT_PUBLIC_SITE_DESCRIPTION=test netlify deploy
+NEXT_PUBLIC_KEYWORDS=test, netlify,blog
+NEXT_PUBLIC_FOOTER=Made with ❤️ by jiakai
+NEXT_PUBLIC_POSTS_PERPAGE=10
+NEXT_PUBLIC_GITHUB_REPO=https://github.com/jiakaiBot/test-ntl
+NEXT_PUBLIC_SHOW_COMMENT=true
+
+# Third-party In Integration
+NEXT_PUBLIC_INOREADER_CHANNEL=https://www.inoreader.com/stream/user/1005341682/tag/user-broadcasted/view/json
+NEXT_PUBLIC_RAINDROP=https://bg.raindrop.io/rss/public/32937900
+
+# OpenAI
+NEXT_PUBLIC_OPENAI_API_KEY_AVAILABLE=true
+OPENAI_API_KEY=sk-fomH3XrbFFmUxnVjq9yCT3BlbisoapQtflVFKCeu1eFysbat9Dj
+OPENAI_ORG_ID=org-xQYSuej4Mv0FrPbnasyahcl7G25
+
+# Cloudflare
+NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY=0x4AAAAAAAEvHDZcVcsicussya
+CLOUDFLARE_TURNSTILE_SECRET_KEY=0x4AAAAAAAEvHKOsicuuakaKk5vJd0lVKo05A0CHw
+
+# Email
+EMAIL_USERNAME=2260016947@qq.com
+EMAIL_PASSWORD=pscssaavtvpqcbtkdjdj
+EMAIL_HOST=smtp.qq.com
+EMAIL_PORT=465
+EMAIL_SECURE=true
+
+# Supabase
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBasASFzZSIsInJlZiI6InNucXZ1c2prZnJjanpycXNkd3NpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NDExNzsadasdasdahwIjoxOTk5NjkzMjExfQ.e97hLapcZEHPpvhndOIhrGwypsWLEZbh0-DlP3zqNcs
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNasdasd1c2prZnJjanpycXNkd3NpIiASasm9sZSI6Iasdasdasd24iLCJpYXQiOjE2ODQxMTcyMTEsImV4cCI6MTk5OTY5MzIxMX0.S-VTYgI30wg2bRwO9HnpS1_FpAgapeZ962X7oVoZoEU
+NEXT_PUBLIC_SUPABASE_URL=https://snqvusjdarcjzrqsdwsi.supabase.co
+```
+
+where 1~8 are required, these 8 environment variables are the basic information of the website.
+
+9~10 (Inoreader and Raindrop integration) are optional. If you don't fill them in, the right sidebar of the homepage of the website will not show the links shared by Inoreader and Raindrop.
+
+11~13 optional, this part of the environment variables need your openai key, ask chatgpt || newbing || google for specific details.
+The specific function is to integrate chatgpt to summary article on the left side of each article to help visitors quickly filter information.
+
+14~15 optional, this part of the environment variables need your Cloudflare Turnstile Site key and Secret key. function to prevent robots to submit comments.
+
+16~20 optional (if not open the comment section then no need to fill in, open the comment section recommended to fill in), this part of the environment variables need your email address and authorization code. 
+The function is to send comment email alerts to all parent comment visitors' emails when there are child comments.
+
+21~23 optional (not required if the comments section is not open), this part of the environment variables can be obtained in the supabase API page, 
+the function is to provide comment section data storage and query services.
+
+After adding these environment variables, you should redeploy the project to make the environment variables take effect.
+
+![netlify project redeploy](https://vip2.loli.io/2023/05/16/ngOXuxKkEBYh4tm.webp)
+
+- f. New articles
+
+steps same with vercel.
+
+- g. Delete articles, edit articles
+
+steps same with vercel.
+
+If there is something unclear, you can watch the video version. I won't go into details here.
