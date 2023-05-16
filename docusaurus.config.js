@@ -56,6 +56,8 @@ const config = {
           editUrl:
             'https://github.com/simple-is-awesome/docs/edit/main/',
           editLocalizedFiles: true,
+          blogSidebarTitle: 'All posts',
+          blogSidebarCount: 'ALL',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -102,11 +104,21 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
+      zoom: {
+        selector: '.markdown :not(em) > img',
+        background: {
+          light: 'rgb(255, 255, 255)',
+          dark: 'rgb(50, 50, 50)'
+        },
+      }
     }),
     markdown: {
       mermaid: true,
     },
   themes: ['@docusaurus/theme-mermaid'],
+  plugins: [
+    require.resolve('docusaurus-plugin-image-zoom')
+  ],
 };
 
 module.exports = config;

@@ -1,6 +1,93 @@
 ---
 sidebar_position: 1
-sidebar_label: "Vercel部署"
+sidebar_label: "Vercel部署（推荐）"
 title: "Vercel部署"
 ---
 
+## 1. 视频版
+
+即将到来！
+
+## 2. 文字版
+
+- a. 点击vercel的一键部署按钮。
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/simple-is-awesome/simple)
+
+注：可以选择GitHub账号登录，之后会需要手机号码验证。
+
+- b. 取消勾选创建私有仓库，输入仓库名，点击创建。
+
+![vercel部署图一](https://vip2.loli.io/2023/04/17/IVoHfv7rPwyMTDu.webp)
+
+- c. vercel会自动识别项目，并进行自动部署，耐心等待部署完成。
+
+![vercel部署图二](https://vip2.loli.io/2023/04/17/c9mHiUlIoTNbLOK.webp)
+
+- d. 设置环境变量。【这步操作建议观看视频版本进行】
+
+来到刚才项目的设置界面，设置环境变量。
+
+![vercel部署图三](https://vip2.loli.io/2023/04/17/JKz71vhsGtpMQfe.webp)
+
+添加以下环境变量。举个例子，环境变量的Key填写`NEXT_PUBLIC_SITE_TITLE`，Value填写`test`，则网站的标题会变为`test`。
+
+可以根据下面的样例填写，最后的Supabase可以暂缓填写。
+
+```
+# Basic config
+NEXT_PUBLIC_SITE_URL=https://test-vercel.njxzc.top
+NEXT_PUBLIC_SITE_TITLE=test-vercel
+NEXT_PUBLIC_SITE_DESCRIPTION=test vercel deploy
+NEXT_PUBLIC_KEYWORDS=test, vercel,blog
+NEXT_PUBLIC_FOOTER=Made with ❤️ by jiakai
+NEXT_PUBLIC_POSTS_PERPAGE=10
+NEXT_PUBLIC_GITHUB_REPO=https://github.com/jiakaiBot/test
+NEXT_PUBLIC_SHOW_COMMENT=true
+
+# Third-party In Integration
+NEXT_PUBLIC_INOREADER_CHANNEL=https://www.inoreader.com/stream/user/1005341682/tag/user-broadcasted/view/json
+NEXT_PUBLIC_RAINDROP=https://raindrop.io/Jiakai/interesting-32937900
+
+# OpenAI
+NEXT_PUBLIC_OPENAI_API_KEY_AVAILABLE=true
+OPENAI_API_KEY=sk-fomH3XrbFFmUxnVjq9yCT3BlbisoapQtflVFKCeu1eFysbat9Dj
+OPENAI_ORG_ID=org-xQYSuej4Mv0FrPbnasyahcl7G25
+
+# Cloudflare
+NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY=0x4AAAAAAAEvHDZcVcsicussya
+CLOUDFLARE_TURNSTILE_SECRET_KEY=0x4AAAAAAAEvHKOsicuuakaKk5vJd0lVKo05A0CHw
+
+# Email
+EMAIL_USERNAME=2260016947@qq.com
+EMAIL_PASSWORD=pscssaavtvpqcbtkdjdj
+EMAIL_HOST=smtp.qq.com
+EMAIL_PORT=465
+EMAIL_SECURE=true
+
+# Supabase
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBasASFzZSIsInJlZiI6InNucXZ1c2prZnJjanpycXNkd3NpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NDExNzsadasdasdahwIjoxOTk5NjkzMjExfQ.e97hLapcZEHPpvhndOIhrGwypsWLEZbh0-DlP3zqNcs
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNasdasd1c2prZnJjanpycXNkd3NpIiASasm9sZSI6Iasdasdasd24iLCJpYXQiOjE2ODQxMTcyMTEsImV4cCI6MTk5OTY5MzIxMX0.S-VTYgI30wg2bRwO9HnpS1_FpAgapeZ962X7oVoZoEU
+NEXT_PUBLIC_SUPABASE_URL=https://snqvusjdarcjzrqsdwsi.supabase.co
+```
+
+其中1~8必填，这8个环境变量为网站的基本信息。
+
+9~10（Inoreader和Raindrop集成）选填。不填写，则网站首页的右侧边栏不会显示Inoreader和Raindrop分享的链接。
+
+11~13选填，这部分环境变量需要你的openai key，具体详情可询问chatgpt || newbing || google。
+具体功能是在每篇文章的左侧集成chatgpt总结文章摘要功能，帮助访客快速过滤信息。
+
+14~15选填，这部分环境变量需要你的Cloudflare Turnstile的Site key和Secret key。功能为提供文章底部评论区评论信息提交时的人机验证，阻止机器人提交评论。
+
+16~20选填（如果不开评论区则无需填写，开了评论区推荐填写），这部分环境变量需要你的邮箱地址和授权码。功能为当存在子评论时，向所有的父评论访客的邮箱发送评论邮件提醒。
+
+21~23选填（如果不开评论区则无需填写），这部分环境变量可通过在Vercel的集成应用市场中集成supabase来获取，功能为提供评论区数据的存储和查询服务。
+
+在添加了这些环境变量后，你应该重新部署项目，使环境变量生效。
+
+![vercel project redeploy](https://vip2.loli.io/2023/05/16/JYLFX5bdHyqGOR9.webp)
+
+- e. 设置自定义域名。
+
+点击vercel项目中的Settings—>Domains，填写相应域名，并在域名托管平台做好cname记录的解析即可。

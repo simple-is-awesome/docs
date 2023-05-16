@@ -5,144 +5,207 @@ title: "Selfhosted Deploy"
 ---
 
 :::tip
-预备条件
 
-- 一台VPS（以Debian 11为例，推荐大陆地区以外的vps，大陆地区的服务器需备案后，才可以使用80、443端口）
+Pre-requisites
 
-- 一个域名
+- A VPS (Debian 11 for example, vps outside the mainland is recommended, servers in the mainland need to be filed before they can use port 80 and 443)
 
+- A domain name
 :::
 
+## 1. Video version
 
-## 整体架构流程
+Coming soon.
 
-![自部署架构流程](https://vip2.loli.io/2023/04/20/cKXVud7n9YIeZEz.webp)
+## 2. Text Version
 
-## 具体操作
+### 2.1. Selfhosted Project Architecture
 
-为了方便部署，个人博客系统采用docker部署的方式，使用docker部署优点颇多，具体可见互联网上关于docker部署优势的讨论。
+![Selfhosted Project Architecture](https://vip2.loli.io/2023/04/20/cKXVud7n9YIeZEz.webp)
 
-- 第一步，安装docker。
+### 2.2. Steps
+
+#### a. Install curl tool, take Debian as an example
 
 ```bash
-# 一键安装docker
+apt install curl -y
+```
+
+#### b. 安装docker和docker compose
+
+```bash
 curl -fsSL https://get.docker.com | sh
 ```
 
-在vps上执行上上述指令后，在终端输入`docker`和`docker compose`会出现相应的提示信息，则表明docker已经安装完成。
+#### c. Self-hosted supabase (for storing comment data)
 
-> 注：使用上述命令一键安装docker，可能会提示curl工具没安装，遇到这种情况，可以使用`apt install curl -y`命令先安装curl工具，再执行此一键脚本。
+See [supabase docker deployment documentation](https://supabase.com/docs/guides/self-hosting/docker) for more details
+Or see this youtube instructional video—[Self host Supabase with an Ubuntu Server on Digital Ocean](https://www.youtube.com/watch?v=0bqxrm4PnMA)
 
-- 第二步，创建博客目录。
+[Notes version](https://gist.github.com/real-jiakai/868f3a1c0aed5493d1c4dafc27d5cff8)
+
+:::tip
+
+Note: The notes version adds the installation of caddy, reverse proxy supabase, process of protecting supabase studio, recommended reading.
+
+:::
+
+#### d. Build and deploy with docker
+
+:::tip
+
+Q: Why don't you provide a dockerhub image and pull it directly for deployment?
+
+A: Because Next.js will inline environment variables starting with `NEXT_PUBLIC_` into the docker image when building the docker image, which will cause the environment variables in .env file to not load into the docker container at all. 
+
+Although there are solutions on the web such as adding entrypoint.sh, these solutions are either tedious or require sacrificing the performance of Next.js (which converts static generation to server-side rendering), 
+
+so it is safer to build your own docker image and deploy it with docker compose.
+
+:::
 
 ```bash
-# 创建名为blog的文件夹
-mkdir blog
-# 进入blog文件夹
-cd blog
+# Clone git repository
+git clone https://github.com/simple-is-awesome/simple.git
+# Go to the folder
+cd simple
+# Rename the file
+mv .env.example .env
+# Build a docker image named "blog"
+docker build -t blog .
+# Start and run the docker container as defined in the docker-compose.yml file
+docker compose up -d
 ```
 
-- 第三部，创建`docker-compose.yml`文件
+#### e. Update
 
 ```bash
-# 新建docker-compose.yml文件，并用vim编辑器编辑
-vim docker-compose.yml
+# Stop and delete the services (containers) and their related resources defined by the docker-compose.yml file
+docker compose down
 
-粘贴以下内容
+# Modify .env or secondary development (see below for explanation of modification process)
+
+# Re-create a docker image named "blog"
+docker build -t blog .
+# Start and run the docker container as defined in the docker-compose.yml file
+docker compose up -d
+# Force delete all images that are not referenced by a container
+docker image prune -af
 ```
 
-- cloudflare解析域名
+> Parameters of the .env file
 
-假设你有一个域名为abc.com托管至了cloudflare，则我们需要添加两条A记录。
+Just replace xxxxxxx directly, don't add extra symbols.
 
-一条A记录，记录名为supabase，记录值为你vps的ip地址；
-另一条A记录，记录名为api.supabase，记录值为你vps的ip地址。
+```
+# Basic config
+# Website url (e.g. https://a.exmaple.com)
+NEXT_PUBLIC_SITE_URL=xxxxxx
+# Title of the website (e.g. Xiaoming's blog)
+NEXT_PUBLIC_SITE_TITLE=xxxxxx
+# Description information of the website (e.g., record your study, life, entertainment)
+NEXT_PUBLIC_SITE_DESCRIPTION=xxxxxx
+# Keywords for the website (e.g. blog, life, xiaoming)
+NEXT_PUBLIC_KEYWORDS=xxxxxx
+# Bottom information of the website (e.g. © 2023 Made with ❤️ By Xiaoming.)
+NEXT_PUBLIC_FOOTER=xxxxxx
+# of articles per page of the site (e.g., 10)
+NEXT_PUBLIC_POSTS_PERPAGE=xxxxxx
+# github repository address of the site (e.g. https://github.com/simple-is-awesome/simple)
+NEXT_PUBLIC_GITHUB_REPO=xxxxxx
+# Whether the site displays comments (e.g. true)
+NEXT_PUBLIC_SHOW_COMMENT=xxxxxx
 
-- 自托管nginx proxy manager或者自托管caddy
+# Third-party In Integration
+# json link to Inoreader's public channel (e.g. https://www.innoreader.com/stream/user/1005341682/tag/user-broadcasted/view/json)
+NEXT_PUBLIC_INOREADER_CHANNEL=xxxxxx
+# rss link to Raindrop's shared collection (e.g. https://bg.raindrop.io/rss/public/32937900)
+NEXT_PUBLIC_RAINDROP=xxxxxx
 
-debian安装caddy的步骤。[官方文档](https://caddyserver.com/docs/install)
+# OpenAI
+# Whether the OpenAI API is accessible (e.g. true)
+NEXT_PUBLIC_OPENAI_API_KEY_AVAILABLE=xxxxxx
+# API KEY of OpenAI
+OPENAI_API_KEY=xxxxxx
+# Organization ID of OpenAI
+OPENAI_ORG_ID=xxxxxx
 
-```bash
-sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-sudo apt update
-sudo apt install caddy
+# Cloudflare
+# Can be created through the Cloudflare backend administration panel of the Turnstile option to get
+# Cloudflare Turnstile's site key
+NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY=xxxxxx
+# Cloudflare Turnstile's secret key
+CLOUDFLARE_TURNSTILE_SECRET_KEY=xxxxxx
+
+# Email
+# Can be used for comment reply email notifications
+# Mailbox username (如xxx@qq.com)
+EMAIL_USERNAME=xxxxxx
+# Mailbox authorization code (can be obtained by opening smtp service inside the mailbox settings)
+EMAIL_PASSWORD=xxxxxx
+# Mailbox SMTP server address (such as: smtp.qq.com)
+EMAIL_HOST=xxxxxx
+# mailbox port (such as: 465)
+EMAIL_PORT=xxxxxx
+# Whether to encrypt the mailbox when it sends emails (e.g. true)
+EMAIL_SECURE=xxxxxx
+
+# Supabase
+# Service role key for Supabase project (see SERVICE_ROLE_KEY in supabase/docker/.env)
+SUPABASE_SERVICE_ROLE_KEY=xxxxxx
+# Anonymous role key for Supabase project (see ANON_KEY in supabase/docker/.env)
+NEXT_PUBLIC_SUPABASE_ANON_KEY=xxxxxx
+# API URL for Supabase project (e.g. https://api.supabase.exmaple.com, see the tutorial in self-hosted supabase)
+NEXT_PUBLIC_SUPABASE_URL=xxxxxx
 ```
 
-接着可以编辑/etc/caddy/Caddyfile文件，添加以下内容：
+#### f. The reverse proxy blog docker and the host corresponding port
 
-```bash
-supbase.abc.com {
-    reverse_proxy localhost:3000
+Edit /etc/caddy/Caddyfile
+
+```
+demo.example.com {
+	reverse_proxy localhost:3001
 }
-
-api.supabase.abc.com {
-    reverse_proxy localhost:8000
-}
 ```
 
-再在命令行中执行以下命令：
+Reload caddy
 
 ```bash
 systemctl reload caddy
 ```
 
-- 自托管supabase
+#### g. Writing a blog
 
-[官方文档](https://supabase.com/docs/guides/self-hosting/docker)
+Create a new md or mdx file in the posts folder under the simple folder.
 
-根据官方文档的步骤，执行以下命令。
+Follow the frontmatter as shown below:
+
+```
+---
+title: "GitHub Flavored Markdown syntax"
+date: "2023-03-30"
+tags: ["github", "markdown"]
+slug: "github-flavored-markdown"
+summary: "Summary of GitHub Flavored Markdown syntax"
+showtoc: true
+---
+```
+
+#### h. Repeat the update step
 
 ```bash
-git clone --depth 1 https://github.com/supabase/supabase
+# Stop and delete the services (containers) and their related resources defined by the docker-compose.yml file
+docker compose down
 
-cd supabase/docker
+# Modify .env or secondary development (see below for explanation of modification process)
 
-cp .env.example .env
+# Re-create a docker image named "blog"
+docker build -t blog .
+# Start and run the docker container as defined in the docker-compose.yml file
+docker compose up -d
+# Force Delete all images that are not referenced by a container
+docker image prune -af
 ```
 
-修改.env文件的内容：
-
-```yaml
-POSTGRES_PASSWORD=xxxxxx
-JWT_SECRET=xxxxxx
-ANON_KEY=xxxxxx
-SERVICE_ROLE_KEY=xxxxxx
-
-SITE_URL=xxxxxx
-API_EXTERNAL_URL=xxxxxx
-
-## Email auth
-ENABLE_EMAIL_SIGNUP=xxxxxx
-ENABLE_EMAIL_AUTOCONFIRM=xxxxxx
-SMTP_ADMIN_EMAIL=xxxxxx
-SMTP_HOST=xxxxxx
-SMTP_PORT=xxxxxx
-SMTP_USER=xxxxxx
-SMTP_PASS=xxxxxx
-SMTP_SENDER_NAME=xxxxxx
-
-# replace if you intend to use Studio outside of localhost
-SUPABASE_PUBLIC_URL=xxxxxx
-```
-
-修改volumes/api/kong.yml文件的内容：
-
-```yaml
-consumers:
-  - username: anon
-    keyauth_credentials:
-      - key: xxxxxx
-  - username: service_role
-    keyauth_credentials:
-      - key: xxxxxx
-```
-
-接着在supabase/docker目录下执行以下命令：
-
-```bash
-docker-compose up -d
-```
-
-此时，访问https://supabase.abc.com，就能来到supabase的登录页面了。
+After done the scripts above, visit `https://demo.exmaple.com` to access the blog containing your latest post.

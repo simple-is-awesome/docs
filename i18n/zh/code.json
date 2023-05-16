@@ -6,19 +6,19 @@
     "message": "由Next.js驱动"
   },
   "Built with Next.js, leveraging the power of both SSG and SSR to deliver a fast and dynamic personal blogging experience.": {
-    "message": "使用Next.js构建，利用SSG和SSR的力量，提供快速和动态的个人博客体验。"
+    "message": "使用Next.js构建，利用SSG和SSR的优势，提供快速和动态的个人博客体验。"
   },
   "Integrate with GPT-3.5": {
     "message": "集成GPT-3.5"
   },
   "Integrate GPT-3.5 Turbo API to summarize your articles. Elevate your blog to a new level of modernity and sophistication.": {
-    "message": "整合GPT-3.5 Turbo API来总结你的文章。将你的博客提升到一个新的现代性和先进性水平。"
+    "message": "整合GPT-3.5 Turbo API来总结你的文章。使得你的博客更加现代化。"
   },
   "Comment Security with Cloudflare Turnstile": {
     "message": "集成Cloudflare Turnstile确保评论安全"
   },
   "Enhance your blog's comment section with Cloudflare Turnstile integration. Protect your site from spam and abuse.": {
-    "message": "利用Cloudflare Turnstile的集成，增强您博客的评论区。保护你的网站免遭垃圾邮件和滥用。"
+    "message": "利用Cloudflare Turnstile的集成，保护你的网站免遭机器人评论和评论滥用。"
   },
   "theme.ErrorPageContent.title": {
     "message": "页面已崩溃。",
